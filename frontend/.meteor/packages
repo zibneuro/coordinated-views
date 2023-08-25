@@ -1,0 +1,47 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-base@1.4.0
+underscore@1.0.10
+mquandalle:jade
+natestrauser:font-awesome
+iron:router
+mizzao:jquery-ui
+vsivsi:job-collection
+accounts-password@1.5.1
+ian:accounts-ui-bootstrap-3
+nimble:restivus
+reactive-var@1.0.11
+force-ssl@1.1.0
+reactive-dict@1.3.0
+reywood:publish-composite
+mobile-experience@1.0.5
+mongo@1.6.2
+blaze-html-templates
+session@1.2.0
+jquery@1.9.1
+tracker@1.2.0
+logging@1.1.20
+reload@1.3.0
+random@1.1.0
+ejson@1.1.0
+spacebars
+check@1.3.1
+momentjs:moment
+ecmascript@0.12.4
+alanning:roles
+standard-minifier-css@1.5.3
+shell-server@0.4.0
+themeteorchef:bert
+peerlibrary:aws-sdk
+standard-minifier-js@2.4.1
+dynamic-import@0.5.1
+jabbslad:basic-auth
+
+fourseven:scss
+http
+mrt:mathjax
+react-template-helper

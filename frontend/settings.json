@@ -1,0 +1,7 @@
+{
+    "public": {
+        "DEV": 1,
+        "MATRIX_SERVER_DEV": "http://localhost:5000/matrixServer",
+        "MATRIX_COMPUTE_SERVER_DEV": "http://localhost:5001/matrixComputeServer"        
+    }
+}
