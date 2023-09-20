@@ -74,4 +74,7 @@ in Powershell use:
 ```
 $env:NODE_TLS_REJECT_UNAUTHORIZED = "0"
 ```
+
+serve cannot be run on Windows:
+https://www.com-magazin.de/tipps-tricks/powershell/windows-10-verweigert-ausfuehrung-powershell-skript-2546684.html
 --->

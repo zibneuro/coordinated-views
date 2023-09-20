@@ -3,7 +3,7 @@ import createScatterplot from 'regl-scatterplot';
 import { viridisColormapReverse } from '../core/colorManager';
 import CoordinatedView from '../core/coordinatedView';
 
-import { deepCopy } from '../core/utilCore';
+import { deepCopy, getValueOrDefault } from '../core/utilCore';
 import { SelectionEvent } from '../core/interactionEvent';
 
 
@@ -73,16 +73,18 @@ class ReglScatterPlot extends CoordinatedView {
       canvas,
       width,
       height,
-      pointSize: this.configuration.pointSize ? this.configuration.pointSize : 2,
-      lassoOnLongPress: true,
+      pointSize: getValueOrDefault(this.configuration.pointSize, 2),
       lassoColor: "#ffa500",
+      performanceMode: getValueOrDefault(this.configuration.performanceMode, true),
+      lassoMinDelay: 0,
+      lassoMinDist: 0,
       pointColor: this.has_color ? viridisColormapReverse : ["#4682b4"],
-      opacityInactiveMax: this.configuration.pointOpacity ? this.configuration.pointOpacity : 0.3,
+      opacityInactiveMax: getValueOrDefault(this.configuration.pointOpacity, 0.85),
       colorBy: this.has_color ? 'valueA' : undefined,
-      keyMap: { alt: 'lasso', shift: 'rotate' }
+      mouseMode: "lasso",
     });
-
-
+    // keyMap: { alt: 'lasso', shift: 'rotate' }
+    
     let format = this.embedding === "PCA" ? "flat-normalized-PCA" : "flat-normalized";
     let that = this;
     this.dataManager.loadValues((data) => {

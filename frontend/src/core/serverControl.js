@@ -39,7 +39,7 @@ class ServerControl extends React.Component {
         this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
 
-        const currentUrl = getSessionDataServerURL(getServerSettings.DATA_SERVER_DEV);
+        //const currentUrl = getSessionDataServerURL(getServerSettings.DATA_SERVER_DEV);
 
         this.state = {
             urlDataServer: getServerSettings().DATA_SERVER_DEV,

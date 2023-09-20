@@ -35,7 +35,7 @@ class TimeControlView extends CoordinatedView {
     }
 
     updateSelection() {                       
-        if(this.selection.length == 0){
+        if(this.selection.length === 0){
             this.setState(state => {
                 state.simulations = [];
                 return state;

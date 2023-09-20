@@ -57,6 +57,22 @@ class GridControl extends React.Component {
         }
         
         let isScatterPlot = viewSpec.type.indexOf("regl") !== -1;
+        let isAnatomicalView = viewSpec.type.indexOf("anatomical") !== -1;
+        let isDendriteView = false;
+        console.log(viewSpec.configuration);
+        if(viewSpec.configuration){
+            isDendriteView = viewSpec.configuration.presetCamera === "case-study-2";
+        } 
+        let hint = undefined;
+        if(isScatterPlot){
+            hint = "lasso select: left mouse; reset: double click"
+        } else if (isAnatomicalView){
+            if(isDendriteView){
+                hint = "click on dendrite segment to place probe";
+            } else {
+                hint = "lasso select: ALT + left mouse; reset: double click";
+            }
+        }
         let view = undefined;
         if (viewSpec) {
 
@@ -81,9 +97,12 @@ class GridControl extends React.Component {
                 } else {
                     rows.push(<tr key={"c"}><td className='blueText'>c: n/a</td></tr>)                    
                 } 
-                rows.push(<tr key={"info"}><td className='orangeText'>lasso select: ALT + left mouse; reset: double click</td></tr>)                
 
                 return rows;                                         
+            }
+
+            const formatHint = (hint) => {
+                return <tr key={"info"}><td className='orangeText'>{hint}</td></tr>
             }
 
             let annotated = <table style={{ width: 100}} className="noMargin">
@@ -91,6 +110,7 @@ class GridControl extends React.Component {
                     <tr>
                         <td className='codeText'>{viewName}</td>
                     </tr>                    
+                    {hint !== undefined && formatHint(hint)}
                     <tr>
                         <td>
                             {view}
