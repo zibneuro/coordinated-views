@@ -63,9 +63,11 @@ class GridControl extends React.Component {
         if(viewSpec.configuration){
             isDendriteView = viewSpec.configuration.presetCamera === "case-study-2";
         } 
+
+        // tbd: move interaction hints to configuration 
         let hint = undefined;
         if(isScatterPlot){
-            hint = "lasso select: left mouse; reset: double click"
+            hint = "lasso select: ALT + left mouse; reset: double click"
         } else if (isAnatomicalView){
             if(isDendriteView){
                 hint = "click on dendrite segment to place probe";

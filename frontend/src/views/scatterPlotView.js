@@ -46,6 +46,7 @@ class ReglScatterPlot extends CoordinatedView {
 
 
   handleSelect(eventArgs) {
+    console.log(eventArgs);
     this.notifyInteraction(new SelectionEvent(this.name, this.dataTable).setIndices(eventArgs.points));
   }
 
@@ -75,15 +76,12 @@ class ReglScatterPlot extends CoordinatedView {
       height,
       pointSize: getValueOrDefault(this.configuration.pointSize, 2),
       lassoColor: "#ffa500",
-      performanceMode: getValueOrDefault(this.configuration.performanceMode, true),
-      lassoMinDelay: 0,
-      lassoMinDist: 0,
+      performanceMode: getValueOrDefault(this.configuration.performanceMode, false),
       pointColor: this.has_color ? viridisColormapReverse : ["#4682b4"],
-      opacityInactiveMax: getValueOrDefault(this.configuration.pointOpacity, 0.85),
+      opacityInactiveMax: getValueOrDefault(this.configuration.pointOpacity, 0.3),
       colorBy: this.has_color ? 'valueA' : undefined,
-      mouseMode: "lasso",
+      keyMap: { alt: 'lasso', shift: 'rotate' }
     });
-    // keyMap: { alt: 'lasso', shift: 'rotate' }
     
     let format = this.embedding === "PCA" ? "flat-normalized-PCA" : "flat-normalized";
     let that = this;
