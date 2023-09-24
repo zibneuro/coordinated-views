@@ -45,6 +45,7 @@ class AnatomicalView extends CoordinatedView {
         this.pcs_selection[i] = selectedSet.has(i) ? 1 : 0;
       }
     }
+    this.pcs_requires_update = true;
   }
 
   updateCustomData(dataType, data) {
@@ -152,7 +153,13 @@ class AnatomicalView extends CoordinatedView {
 
   componentWillUnmount() {
     super.componentWillUnmount();
-    // free resources 
+    
+    // free resources
+    this.engine.stopRenderLoop();
+    if(this.pcs) {
+      this.pcs.dispose();
+      this.pcs = null;
+    }  
   }
 }
 
@@ -320,6 +327,7 @@ function createPointCloud(tpl) {
 
     let initFunction = function (particle, i, s) {
       particle.position = new BABYLON.Vector3(x[i], z[i], y[i]);
+      particle.color = new BABYLON.Color4(...tpl.pointColorRGB, 1);
     }
 
     tpl.pcs.updateParticle = function (particle) {
@@ -335,17 +343,21 @@ function createPointCloud(tpl) {
       }
     }
 
+    /*
     tpl.pcs.beforeUpdateParticles = () => {
       tpl.pcs_initialized = false;
     }
+    */
 
     tpl.pcs.afterUpdateParticles = () => {
       tpl.pcs_initialized = true;
+      tpl.pcs_requires_update = false;
     }
 
     tpl.pcs.addPoints(nPoints, initFunction);
     tpl.pcs.buildMeshAsync().then(() => {
       tpl.pcs_initialized = true;
+      tpl.pcs_requires_update = true;
     });
   }
 
@@ -618,7 +630,7 @@ function initEngine(tpl) {
 
   tpl.engine.runRenderLoop(function () {
     tpl.scene.render();
-    if (tpl.pcs_initialized) {
+    if (tpl.pcs_initialized && tpl.pcs_requires_update) {
       tpl.pcs.setParticles();
     }
   });
