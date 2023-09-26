@@ -9,34 +9,34 @@ Supports the creation of web-based data analytics dashboards consisting of linke
 
 ## Running the application
 
-### 1. Download example data set
-[Download](https://cloud.zib.de/s/jmF7dejCm92Hpi6) one or all of the example datasets and extract the zip-file(s).
-
-### 2. Create Python environment and start backend server(s)
+### 1. Create Python environment
 The recommended way of setting up your local Python environment is using [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html). A good tutorial on using conda for managing Python environments can be found [here](https://whiteboxml.com/blog/the-definitive-guide-to-python-virtual-environments-with-conda). 
 
-Open a terminal (Linux) and check that conda is available:
+Open a terminal (Linux) or Powershell (Windows) and check that conda is available:
 ```
 conda --version
 ```
-In Windows do so by using a Powershell (if you added conda to the system PATH during installation) or the Anaconda Prompt from the start menu.
+Note: If you did not add conda to the system PATH under Windows, you can us the the Anaconda Prompt (available in the start menu) instead of the Powershell.
 
-In your terminal/shell navigate to this repository, create a new Python environment, and install the required packages.
+In your terminal / Powershell / Anaconda Prompt navigate to this repository, create a new Python environment, and install the required packages.
 ```
 cd <path-to-repository>
 conda create --name coordinated-views python=3.8
 conda activate coordinated-views
 pip install -r requirements.txt
 ```
-Start data server:
+
+### 2. Start backend server
+Navigate to repository, activate Python environment, and start data server (case study 1).
+```
+cd <path-to-repository>
+conda activate coordinated-views
+python data_server.py data/case_study_1
+```
+Data for case study 2 can be obtained [here](https://cloud.zib.de/s/jmF7dejCm92Hpi6). To view the membrane potential on the dendrite additionally start the compute server:
 ```
 conda activate coordinated-views
-python data_server.py <path-to>/case_study_1
-```
-Alternatively, specify `case_study_2` or another dataset. Inspecting the membrane potentials on the dendrite surface in case study 2 will additionally require starting the compute server:
-```
-conda activate coordinated-views
-python compute_server.py <path-to>/case_study_2/simulation_data
+python compute_server.py data/case_study_2/simulation_data
 ```
 
 ### 3. Start web-based frontend
