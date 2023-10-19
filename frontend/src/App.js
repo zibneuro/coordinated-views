@@ -11,6 +11,7 @@ import ViewSpecificationsControl from './core/viewSpecifications';
 import GrammarControl from './core/grammarView.js';
 import GridControl from './core/gridLayout.js';
 import ServerControl from './core/serverControl';
+import EmptyControl from './core/emptyControl';
 
 class App extends React.Component {
 
@@ -30,7 +31,7 @@ class App extends React.Component {
     const viewManager = new ViewManager()
     const GoldenLayout = require('golden-layout');
 
-    viewManager.dataManager.loadInitialData(() => {
+    viewManager.dataManager.loadInitialData((serverConnected) => {
 
         let config = {
             dimensions: {
@@ -108,10 +109,17 @@ class App extends React.Component {
         let myLayout = new GoldenLayout(config, this.myRef.current);
 
         myLayout.registerComponent("server-control", ServerControl);
-        myLayout.registerComponent("project-control", ProjectControl);
-        myLayout.registerComponent("view-specifications-control", ViewSpecificationsControl);
-        myLayout.registerComponent("grammar-control", GrammarControl);
-        myLayout.registerComponent("grid-control", GridControl);        
+        if(serverConnected){
+            myLayout.registerComponent("project-control", ProjectControl);
+            myLayout.registerComponent("view-specifications-control", ViewSpecificationsControl);
+            myLayout.registerComponent("grammar-control", GrammarControl);
+            myLayout.registerComponent("grid-control", GridControl);        
+        } else {
+            myLayout.registerComponent("project-control", EmptyControl);
+            myLayout.registerComponent("view-specifications-control", EmptyControl);
+            myLayout.registerComponent("grammar-control", EmptyControl);
+            myLayout.registerComponent("grid-control", EmptyControl);        
+        }
         
         window.React = React;
         window.ReactDOM = ReactDOM;

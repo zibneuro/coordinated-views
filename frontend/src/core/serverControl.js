@@ -2,23 +2,15 @@ import React from 'react';
 import { DEFAULT_SERVER_SETTINGS } from './defaults';
 
 
-
-export function getServerSettings() {
-    return DEFAULT_SERVER_SETTINGS;
-}
-
-export function getSessionDataServerURL(defaultUrl) {
-    let url = window.sessionStorage.getItem("dataServerURL")
-    //console.log(url);
-    if (url) {
-        return url
+export function getServerURL(serverName) {
+    const customUrl = window.sessionStorage.getItem(serverName);        
+    if(customUrl){
+        return customUrl;
+    } else if(DEFAULT_SERVER_SETTINGS[serverName] !== undefined){        
+        return DEFAULT_SERVER_SETTINGS[serverName]        
     } else {
-        return defaultUrl
-    }
-}
-
-function setDataServerUrl(url) {
-    window.sessionStorage.setItem("dataServerURL", url);
+        throw Error(serverName);
+    }    
 }
 
 
@@ -39,33 +31,39 @@ class ServerControl extends React.Component {
         this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
 
-        //const currentUrl = getSessionDataServerURL(getServerSettings.DATA_SERVER_DEV);
-
         this.state = {
-            urlDataServer: getServerSettings().DATA_SERVER_DEV,
-            urlComputeServer: getServerSettings().COMPUTE_SERVER_DEV
+            urlDataServer: getServerURL("DATA_SERVER"),
+            urlComputeServer: getServerURL("COMPUTE_SERVER")
         }
     }
 
-    handleUrlChange(event) {
+    handleUrlChange(event, server) {
         this.setState((state) => {
-            state.url = event.target.value;
+            if(server === "DATA_SERVER"){
+                state.urlDataServer = event.target.value;
+            } else if (server === "COMPUTE_SERVER") {
+                state.urlComputeServer = event.target.value;
+            }
+            
             return state;
         });
     }
 
-    handleSaveClick() {
-        const url = this.state.url;
-        if (isValidUrl(url)) {
-            //console.log("save");
-            setDataServerUrl(url);
-            window.location.reload();
+    handleSaveClick() {        
+        console.log(this.state.urlDataServer, isValidUrl(this.state.urlDataServer));
+        if (isValidUrl(this.state.urlDataServer)) {
+            window.sessionStorage.setItem("DATA_SERVER", this.state.urlDataServer);
+
         }
+        if (isValidUrl(this.state.urlComputeServer)) {
+            window.sessionStorage.setItem("COMPUTE_SERVER", this.state.urlComputeServer);
+        }
+
+        window.location.reload();
     }
 
-    render() {
-        //const inputColor = isValidUrl(this.state.url) ? "white" : "LightCoral";
-        const inputColor = "lightgrey";
+    render() {                
+        const inputColor = this.dataManager.dataServerConnected ? "white" : "lightcoral";
 
         return <table style={{ width: '100%' }}><tbody>
             <tr>
@@ -75,26 +73,23 @@ class ServerControl extends React.Component {
             </tr>
             <tr>
                 <td>
-                    <input disabled style={{ width: '95%', backgroundColor: inputColor }} type="text" value={this.state.urlDataServer} onInput={this.handleUrlChange.bind(this)}></input>
+                    <input style={{ width: '95%', backgroundColor: inputColor }} type="text" value={this.state.urlDataServer} onInput={(event) => this.handleUrlChange(event, "DATA_SERVER")}></input>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input disabled style={{ width: '95%', backgroundColor: inputColor }} type="text" value={this.state.urlComputeServer} onInput={this.handleUrlChange.bind(this)}></input>
+                    <input style={{ width: '95%', backgroundColor: "white" }} type="text" value={this.state.urlComputeServer} onInput={(event) => this.handleUrlChange(event, "COMPUTE_SERVER")}></input>
                 </td>
             </tr>                        
+            <tr>
+                <td>
+                    <button className="blueButton" onClick={this.handleSaveClick.bind(this)}>Reconnect</button>
+                </td>
+            </tr>
         </tbody>
         </table>
     }
 }
-
-/*
-<tr>
-    <td>
-        <button disabled={true} className="blueButton" onClick={this.handleSaveClick.bind(this)}>Connect</button>
-    </td>
-</tr>
-*/
 
 export default ServerControl
 

@@ -57,8 +57,11 @@ If 'serve' is not available, install it with:
 npm install --global serve
 ```
 
-<!---
 ## Known issues
+
+- Mac OS: Safari browser leads to connection problems with Python server (related to CORS). Recommended workaround: use Firefox browser on Mac OS.
+
+<!--
 If there are certificate errors downloading packages during install or run use the following setting before executing meteor command.
 #### Resolve in Linux
 ```

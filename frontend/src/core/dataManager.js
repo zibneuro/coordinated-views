@@ -1,6 +1,6 @@
 import { deepCopy, getColumnMinMaxValues } from './utilCore.js';
 
-import { getSessionDataServerURL, getServerSettings } from './serverControl.js';
+import { getServerURL } from './serverControl.js';
 import axios from 'axios';
 
 import { Observable } from 'babylonjs';
@@ -54,6 +54,7 @@ export class DataManager {
         this.cache = {};
         this.cacheExpanded = {};
         this.cacheTableProps = {};
+        this.dataServerConnected = false;
         this.processSelection(this.lastTreeSelection);
     }
 
@@ -87,27 +88,33 @@ export class DataManager {
         let that = this;
 
         this.getMetaData((responseData) => {
-            that.metaData = responseData.meta_data;
-            that.available_views = responseData.available_views;
-            //console.log(responseData);
-            that.table_mapping = responseData.table_mapping;
+            if(responseData === undefined){
+                that.dataServerConnected = false;
+                callback(false);
+            } else {
+                that.dataServerConnected = true;
 
-            const cachedTables = responseData.cached_tables;
-            const numTablesToLoad = cachedTables.length;
-            let numTablesLoaded = 0;
+                that.metaData = responseData.meta_data;
+                that.available_views = responseData.available_views;            
+                that.table_mapping = responseData.table_mapping;
 
-            for (let tableIdx = 0; tableIdx < numTablesToLoad; tableIdx++) {
-                // eslint-disable-next-line
-                that.loadTable(() => {
-                    numTablesLoaded += 1;
-                    if (numTablesLoaded === numTablesToLoad) {
-                        callback();
-                    }
-                }, cachedTables[tableIdx]);
-            }
+                const cachedTables = responseData.cached_tables;
+                const numTablesToLoad = cachedTables.length;
+                let numTablesLoaded = 0;
 
-            if (numTablesToLoad === 0) {
-                callback();
+                for (let tableIdx = 0; tableIdx < numTablesToLoad; tableIdx++) {
+                    // eslint-disable-next-line
+                    that.loadTable(() => {
+                        numTablesLoaded += 1;
+                        if (numTablesLoaded === numTablesToLoad) {
+                            callback(true);
+                        }
+                    }, cachedTables[tableIdx]);
+                }
+
+                if (numTablesToLoad === 0) {
+                    callback(true);
+                }
             }
         });
     }
@@ -356,35 +363,17 @@ export class DataManager {
     getDataServerURL(endpoint) {
         if (endpoint[0] !== '/') {
             endpoint = '/' + endpoint;
-        }
-        if (getServerSettings().DEV) {
-            const url = getSessionDataServerURL(getServerSettings().DATA_SERVER_DEV);
-            return url + endpoint;
-        } else {
-            return getServerSettings().DATA_SERVER_PROD + endpoint;
-        }
+        }        
+        const url = getServerURL("DATA_SERVER");
+        return url + endpoint;        
     }
 
     getComputeServerURL(endpoint) {
         if (endpoint[0] !== '/') {
             endpoint = '/' + endpoint;
-        }
-        if (getServerSettings().DEV) {
-            return getServerSettings().COMPUTE_SERVER_DEV + endpoint;
-        } else {
-            return getServerSettings().COMPUTE_SERVER_PROD + endpoint;
-        }
-    }
-
-    getServerURL(endpoint) {
-        if (endpoint[0] !== '/') {
-            endpoint = '/' + endpoint;
-        }
-        if (getServerSettings().DEV) {
-            return getServerSettings().SERVER_DEV + endpoint;
-        } else {
-            return getServerSettings().SERVER_PROD + endpoint;
-        }
+        }        
+        const url = getServerURL("COMPUTE_SERVER")
+        return url + endpoint;
     }
 
 
@@ -471,10 +460,10 @@ export class DataManager {
             .then(response => {
                 let responseData = response.data;
                 callback(responseData);
-            });
-        /*
-        .catch(error => {
-            console.log(error);
-        });        */
+            })        
+            .catch(error => {
+                console.log(error);
+                callback(undefined);
+            });        
     }
 }

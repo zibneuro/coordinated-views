@@ -242,6 +242,13 @@ https://www.bestcssbuttongenerator.com/
     font-size: 10px;
 }
 
+.redTextLarger {    
+    color: red;
+	font-family: "Fira Mono", monospace;
+    font-style: "Fira Mono", normal;
+    font-size: 14px;
+}
+
 
 .noMargin {
     margin:0;

@@ -20,19 +20,6 @@ export function indicesIdentical(indices1, indices2) {
 }
 
 
-export function getComputeServerURL(endpoint) {
-    if (endpoint[0] !== '/') {
-        endpoint = '/' + endpoint;
-    }
-    if (getServerSettings().DEV) {
-        return getServerSettings().SERVER_DEV + endpoint;
-    } else {
-        return getServerSettings().SERVER_PROD + endpoint;
-    }
-}
-
-
-
 export function getColumnMinMaxValues(arr, columnNames) {
     const columnMinMax = [];
     for (let col = 0; col < arr[0].length; col++) {
