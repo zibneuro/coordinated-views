@@ -83,7 +83,6 @@ export class InteractionHandler {
                             }
                         }
                     }
-                    console.log(actionsToPerform);
                 }
             }
 

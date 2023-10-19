@@ -58,8 +58,7 @@ class GridControl extends React.Component {
         
         let isScatterPlot = viewSpec.type.indexOf("regl") !== -1;
         let isAnatomicalView = viewSpec.type.indexOf("anatomical") !== -1;
-        let isDendriteView = false;
-        console.log(viewSpec.configuration);
+        let isDendriteView = false;        
         if(viewSpec.configuration){
             isDendriteView = viewSpec.configuration.presetCamera === "case-study-2";
         } 

@@ -45,8 +45,7 @@ class ReglScatterPlot extends CoordinatedView {
   }
 
 
-  handleSelect(eventArgs) {
-    console.log(eventArgs);
+  handleSelect(eventArgs) {    
     this.notifyInteraction(new SelectionEvent(this.name, this.dataTable).setIndices(eventArgs.points));
   }
 

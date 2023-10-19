@@ -39,7 +39,6 @@ class CoordinatedView extends React.Component {
             }
             this.updateSelection();
         } else if (action instanceof CustomAction) {
-            console.log(action.dataType, action.data);
             this.updateCustomData(action.dataType, action.data);
         }
     }
